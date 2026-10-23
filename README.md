@@ -42,7 +42,11 @@ Proyecto personal para practicar administración básica de un servidor Ubuntu S
 
 \## Port Forwarding
 
+Reglas de reenvío de puertos configuradas en VirtualBox para exponer SSH y HTTP desde el host Windows hacia la máquina virtual Ubuntu Server.
+
 \- 2222 -> 22/TCP para SSH
 
 \- 8080 -> 80/TCP para HTTP
+
+
 
