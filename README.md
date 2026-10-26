@@ -27,6 +27,8 @@ El laboratorio fue implementado sobre Ubuntu Server en VirtualBox y fue evolucio
 
 \- systemd
 
+- Docker
+
 
 Arquitectura actual
 
@@ -75,6 +77,8 @@ Ubuntu Server
 \- Creación de un servicio systemd
 
 \- Inicio automático de la aplicación flask al arrancar Ubuntu
+
+- Containerización de la aplicación Flask con Docker
 
 
 
@@ -219,3 +223,91 @@ Gracias a systemd, Gunicorn se inicia automáticamente cuando arranca Ubuntu Ser
 \- Logs del servicio Flask/Gunicorn:
 
     sudo journalctl -u flask-app
+
+## Docker
+
+Como evolución del despliegue original, la aplicación Flask fue containerizada con Docker.
+
+Se creó una imagen basada en `python:3.12-slim` que incluye las dependencias necesarias para ejecutar la aplicación mediante Gunicorn.
+
+### Archivos utilizados
+
+```text
+app-python/
+├── app.py
+├── requirements.txt
+└── Dockerfile
+```
+
+El archivo `requirements.txt` contiene las dependencias principales:
+
+```text
+Flask
+gunicorn
+```
+
+El `Dockerfile` utilizado es:
+
+```dockerfile
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY app.py .
+
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
+```
+
+### Construcción de la imagen
+
+La imagen se construyó con:
+
+```bash
+docker build -t flask-seguro .
+```
+
+La imagen generada se puede verificar mediante:
+
+```bash
+docker images
+```
+
+### Ejecución del contenedor
+
+Para ejecutar la aplicación se utilizó:
+
+```bash
+docker run -d --name flask-app -p 5000:5000 flask-seguro
+```
+
+El mapeo:
+
+```text
+5000:5000
+```
+
+representa:
+
+```text
+Puerto 5000 del host Ubuntu -> Puerto 5000 del contenedor
+```
+
+El contenedor puede verificarse con:
+
+```bash
+docker ps
+```
+
+y la aplicación puede probarse desde Ubuntu mediante:
+
+```bash
+curl http://127.0.0.1:5000
+```
+
+Con esta etapa, Gunicorn y Flask se ejecutan dentro de un contenedor Docker, permitiendo empaquetar la aplicación y sus dependencias en un entorno reproducible.
+
+> Nota: la integración de Nginx dentro de Docker y el uso de Docker Compose quedan como una siguiente etapa del proyecto.
