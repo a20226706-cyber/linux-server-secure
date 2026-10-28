@@ -1,37 +1,27 @@
-\# Servidor Linux Seguro Alvaro
-
-
+# Servidor Linux Seguro
 
 Proyecto personal orientado a practicar administración de servidores Linux, seguridad básica, despliegue web y fundamentos de DevOps.
 
-El laboratorio fue implementado sobre Ubuntu Server en VirtualBox y fue evolucionando desde una configuración básica con SSH y Nginx hasta una arquitectura con reverse proxy, Flask, Gunicorn y systemd.
+El laboratorio fue implementado sobre Ubuntu Server en VirtualBox y evolucionó desde una configuración tradicional con SSH, UFW, Nginx, Flask, Gunicorn y systemd hacia una arquitectura contenerizada utilizando Docker y Docker Compose.
 
+## Tecnologías utilizadas
 
-\## Tecnologías
-
-\- Ubuntu Server
-
-\- VirtualBox
-
-\- OpenSSH
-
-\- UFW
-
-\- Nginx
-
-\- Git/GitHub
-
-\- Python
-
-\- Flask
-
-\- systemd
-
+- Ubuntu Server
+- Oracle VirtualBox
+- OpenSSH
+- UFW
+- Nginx
+- Python
+- Flask
+- Gunicorn
+- systemd
 - Docker
+- Docker Compose
+- Git y GitHub
 
+## Arquitectura inicial
 
-Arquitectura actual
-
+```text
 Windows Host
     |
     | HTTP -> 127.0.0.1:8080
@@ -48,205 +38,39 @@ Ubuntu Server
           |
           v
         Flask
-
-
-\## Implementado
-
-\- Creación de usuarios y grupos
-
-\- Gestión de permisos con chmod y chown
-
-\- Acceso remoto por SSH
-
-\- Firewall UFW
-
-\- Servidor web Nginx
-
-\- Port forwarding
-
-\- Revisión de logs
-
-\- Creación de aplicación web con Flask
-
-\- Configuración de Nginx como reverse proxy
-
-\- Uso de headers X-Real-IP y X-Forwarded-For
-
-\- Ejecución de Flask mediante Gunicorn
-
-\- Creación de un servicio systemd
-
-\- Inicio automático de la aplicación flask al arrancar Ubuntu
-
-- Containerización de la aplicación Flask con Docker
-
-
-
-\## USUARIOS, GRUPOS Y PERMISOS
-
-\- Ejemplo de creación de usuario y grupo:
-
-    sudo adduser prueba
-    sudo groupadd seguro
-    sudo usermod -aG seguro prueba
-
-\- Ejemplo de configuración de propietario y permisos:
-
-    sudo chown alvaro:seguro /proyecto-seguro
-    sudo chmod 750 /proyecto-seguro
-
-\## Firewall UFW
-
-\- Se habilitaron únicamente los servicios necesarios:
-
-    sudo ufw allow OpenSSH
-    sudo ufw allow 'Nginx HTTP'
-    sudo ufw enable
-    sudo ufw status
-
-\- Puertos principales:
-
-    22/TCP -> SSH
-    80/TCP -> HTTP / Nginx
-
-\## Port Forwarding
-
-\- VirtualBox utiliza NAT, por lo que se configuraron las siguientes reglas:
-
-    SSH:
-    127.0.0.1:2222 -> 10.0.2.15:22
-
-    HTTP:
-    127.0.0.1:8080 -> 10.0.2.15:80
-
-\- Esto permite acceder desde Windows al servidor Ubuntu sin exponer directamente la    máquina virtual.
-
-\## Nginx
-
-Inicialmente Nginx fue utilizado como servidor web para servir un archivo HTML.
-
-\- Posteriormente fue configurado como reverse proxy:
-
-    location / {
-        proxy_pass http://127.0.0.1:5000;
-
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    }
-
-Con esta configuración, Nginx recibe las peticiones HTTP y las reenvía hacia la aplicación Flask.
-
-\## Aplicación Flask
-
-La aplicación se ejecuta internamente en:
-
-    127.0.0.1:5000
-
-\- Ejemplo básico:
-
-    from flask import Flask, request
-
-    app = Flask(__name__)
-
-    @app.route("/")
-    def inicio():
-        ip_real = request.headers.get("X-Real-IP")
-        ip_forwarded = request.headers.get("X-Forwarded-For")
-
-        return f"""
-        <h1>Servidor de Linux Seguro</h1>
-        <p>IP vista por Flask: {request.remote_addr}</p>
-        <p>X-Real-IP: {ip_real}</p>
-        <p>X-Forwarded-For: {ip_forwarded}</p>
-        """
-
-    if __name__ == "__main__":
-        app.run(host="127.0.0.1", port=5000)
-
-\## Gunicorn
-
-El servidor integrado de Flask se utilizó inicialmente para desarrollo.
-
-\- Posteriormente se utilizó Gunicorn como servidor WSGI:
-
-    gunicorn -b 127.0.0.1:5000 app:app
-
-Gunicorn se encarga de ejecutar la aplicación Flask de una forma más adecuada para un entorno de producción.
-
-\## systemd
-
-Se creó un servicio personalizado:
-
-    /etc/systemd/system/flask-app.service
-
-\- Configuración:
-
-    [Unit]
-    Description=Gunicorn para app Flask
-    After=network.target
-
-    [Service]
-    User=alvaro
-    Group=www-data
-    WorkingDirectory=/home/alvaro/app-python
-    Environment="PATH=/home/alvaro/app-python/venv/bin"
-    ExecStart=/home/alvaro/app-python/venv/bin/gunicorn -b 127.0.0.1:5000 app:app
-    Restart=always
-
-    [Install]
-    WantedBy=multi-user.target
-
-\- Posteriormente se habilitó el servicio:
-
-    sudo systemctl daemon-reload
-    sudo systemctl enable flask-app
-    sudo systemctl start flask-app
-
-Estado:
-
-    systemctl status flask-app
-
-Gracias a systemd, Gunicorn se inicia automáticamente cuando arranca Ubuntu Server.
-
-\## Logs
-
-\- Logs de Nginx:
-
-    sudo tail -f /var/log/nginx/access.log
-    sudo tail -f /var/log/nginx/error.log
-
-\- Logs de autenticación:
-
-    sudo tail -f /var/log/auth.log
-
-\- Logs del servicio Flask/Gunicorn:
-
-    sudo journalctl -u flask-app
-
-## Docker
-
-Como evolución del despliegue original, la aplicación Flask fue containerizada con Docker.
-
-Se creó una imagen basada en `python:3.12-slim` que incluye las dependencias necesarias para ejecutar la aplicación mediante Gunicorn.
-
-### Archivos utilizados
-
-```text
-app-python/
-├── app.py
-├── requirements.txt
-└── Dockerfile
 ```
 
-El archivo `requirements.txt` contiene las dependencias principales:
+En esta primera etapa Nginx, Gunicorn y Flask eran ejecutados directamente sobre Ubuntu Server.
+
+## Arquitectura contenerizada
+
+Posteriormente la aplicación fue migrada a una arquitectura multi-contenedor:
 
 ```text
-Flask
-gunicorn
+Windows
+   |
+   | 127.0.0.1:8080
+   v
+VirtualBox NAT
+   |
+   v
+Ubuntu Server :80
+   |
+   v
+Docker Compose
+   |
+   +-- Contenedor Nginx :80
+   |        |
+   |        | Reverse Proxy
+   |        v
+   +-- Contenedor Flask/Gunicorn :5000
 ```
 
-El `Dockerfile` utilizado es:
+Docker Compose crea además una red interna que permite la comunicación entre ambos servicios.
+
+## Dockerización de Flask
+
+Se creó una imagen propia para la aplicación Flask utilizando el siguiente `Dockerfile`:
 
 ```dockerfile
 FROM python:3.12-slim
@@ -262,52 +86,204 @@ COPY app.py .
 CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
 ```
 
-### Construcción de la imagen
+Las dependencias utilizadas fueron:
 
-La imagen se construyó con:
+```text
+Flask
+gunicorn
+```
+
+La imagen puede construirse mediante:
 
 ```bash
 docker build -t flask-seguro .
 ```
 
-La imagen generada se puede verificar mediante:
+## Nginx en Docker
 
-```bash
-docker images
+Nginx fue ejecutado en un contenedor independiente y configurado como reverse proxy.
+
+Configuración principal:
+
+```nginx
+server {
+    listen 80;
+    server_name _;
+
+    location / {
+        proxy_pass http://flask-app:5000;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
 ```
 
-### Ejecución del contenedor
-
-Para ejecutar la aplicación se utilizó:
-
-```bash
-docker run -d --name flask-app -p 5000:5000 flask-seguro
-```
-
-El mapeo:
+A diferencia de la arquitectura inicial, Nginx ya no utiliza:
 
 ```text
-5000:5000
+127.0.0.1:5000
 ```
 
-representa:
+para localizar Flask.
+
+Ahora utiliza:
 
 ```text
-Puerto 5000 del host Ubuntu -> Puerto 5000 del contenedor
+flask-app:5000
 ```
 
-El contenedor puede verificarse con:
+porque ambos servicios se encuentran dentro de una red Docker y pueden comunicarse utilizando el nombre del contenedor.
+
+## Docker Compose
+
+Se utilizó Docker Compose para administrar ambos servicios desde un único archivo:
+
+```yaml
+services:
+
+  app:
+    build: .
+    container_name: flask-app
+    expose:
+      - "5000"
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+    restart: unless-stopped
+```
+
+La aplicación completa puede iniciarse mediante:
+
+```bash
+docker compose up -d
+```
+
+Verificar los servicios:
+
+```bash
+docker compose ps
+```
+
+Detener y eliminar los contenedores:
+
+```bash
+docker compose down
+```
+
+Y volver a desplegar todo:
+
+```bash
+docker compose up -d
+```
+
+## Comunicación entre contenedores
+
+La comunicación interna sigue este flujo:
+
+```text
+Cliente
+   ↓
+Nginx
+   ↓
+flask-app:5000
+   ↓
+Gunicorn
+   ↓
+Flask
+```
+
+Nginx utiliza la red interna de Docker para encontrar el contenedor `flask-app`.
+
+Esto permite que el puerto `5000` no tenga que estar publicado directamente hacia el host.
+
+## Headers del reverse proxy
+
+La aplicación Flask permite comprobar qué dirección observa directamente y qué información recibió desde Nginx.
+
+Ejemplo obtenido:
+
+```text
+IP vista por Flask: 172.18.0.3
+X-Real-IP: 172.18.0.1
+X-Forwarded-For: 172.18.0.1
+```
+
+Esto demuestra que la petición pasa primero por Nginx antes de llegar al contenedor Flask.
+
+## Comandos útiles
+
+Ver contenedores:
 
 ```bash
 docker ps
 ```
 
-y la aplicación puede probarse desde Ubuntu mediante:
+Ver imágenes:
 
 ```bash
-curl http://127.0.0.1:5000
+docker images
 ```
 
-Con esta etapa, Gunicorn y Flask se ejecutan dentro de un contenedor Docker, permitiendo empaquetar la aplicación y sus dependencias en un entorno reproducible.
+Ver los servicios de Compose:
 
-> Nota: la integración de Nginx dentro de Docker y el uso de Docker Compose quedan como una siguiente etapa del proyecto.
+```bash
+docker compose ps
+```
+
+Ver logs:
+
+```bash
+docker compose logs
+```
+
+Logs específicos de Nginx:
+
+```bash
+docker logs nginx_proxy
+```
+
+Logs de Flask/Gunicorn:
+
+```bash
+docker logs flask-app
+```
+
+## Resultado final
+
+El proyecto evolucionó desde una instalación tradicional:
+
+```text
+Ubuntu
+→ Nginx
+→ Gunicorn
+→ Flask
+```
+
+hacia una arquitectura contenerizada:
+
+```text
+Ubuntu
+→ Docker Compose
+   ├── Nginx
+   └── Flask + Gunicorn
+```
+
+Con esta segunda arquitectura se consiguió:
+
+- aislar las dependencias de la aplicación;
+- crear un entorno reproducible;
+- separar Nginx y Flask en diferentes contenedores;
+- implementar comunicación mediante una red interna de Docker;
+- gestionar múltiples servicios mediante Docker Compose;
+- mantener Nginx como único punto de entrada hacia la aplicación.
