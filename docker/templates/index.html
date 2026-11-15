@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Álvaro Cabrera | Cloud & DevOps Portfolio</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <header class="hero">
+        <nav class="navbar">
+            <div class="logo">AC</div>
+
+            <div class="nav-links">
+                <a href="#sobre-mi">Sobre mí</a>
+                <a href="#proyectos">Proyectos</a>
+                <a href="#tecnologias">Tecnologías</a>
+                <a href="#infraestructura">Infraestructura</a>
+                <a href="#contacto">Contacto</a>
+            </div>
+        </nav>
+
+        <div class="hero-content">
+
+            <div class="hero-text">
+
+                <p class="eyebrow">Ingeniería Informática · PUCP</p>
+
+                <h1>Alvaro Cabrera Buendia</h1>
+
+                <h2>Cloud · Linux · Redes · DevOps</h2>
+
+                <p class="hero-description">
+                    Estudiante de Ingeniería Informática enfocado en infraestructura,
+                    administración de sistemas Linux, redes, cloud y automatización.
+                    Desplegué este portafolio en una instancia de AWS EC2 con Docker Compose,
+                    Nginx, dominio propio y HTTPS.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a href="#proyectos" class="btn primary">
+                        Ver proyectos
+                    </a>
+
+                    <a href="https://github.com/a20226706-cyber"
+                    target="_blank"
+                    class="btn secondary">
+                        GitHub
+                    </a>
+
+                    <a href="https://www.linkedin.com/in/alvaro-cabrera-buendia/"
+                    target="_blank"
+                    class="btn secondary">
+                        LinkedIn
+                    </a>
+                    <a href="/static/cv/CV_Alvaro_Cabrera.pdf"
+                    target="_blank"
+                    class="btn secondary">
+                        CV
+                    </a>
+                </div>
+
+            </div>
+
+
+            <div class="hero-photo">
+
+                <img
+                    src="{{ url_for('static', filename='images/foto-perfil.png') }}"
+                    alt="Álvaro Cabrera Buendía"
+                >
+
+            </div>
+
+        </div>
+    </header>
+
+
+    <main>
+
+        <section id="sobre-mi" class="section">
+            <h2>Sobre mí</h2>
+
+            <p>
+                Me interesa el área de infraestructura tecnológica y cloud,
+                especialmente Linux, redes, contenedores y automatización.
+                Mi objetivo es continuar desarrollándome en Cloud y DevOps,
+                incorporando progresivamente prácticas de seguridad orientadas
+                a DevSecOps y Cloud Security.
+            </p>
+        </section>
+
+
+        <section id="proyectos" class="section">
+            <h2>Proyectos</h2>
+
+            <div class="project-grid">
+
+                <!-- PROYECTO 1: CLOUD AWS -->
+                <article class="card featured">
+
+                    <div class="project-image">
+                        <img
+                            src="{{ url_for('static', filename='images/cloud-aws.png') }}"
+                            alt="Despliegue Cloud en AWS"
+                        >
+                    </div>
+
+                    <div class="project-content">
+
+                        <span class="project-label">
+                            Proyecto destacado
+                        </span>
+
+                        <h3>Despliegue Cloud en AWS</h3>
+
+                        <p>
+                            Despliegue de una aplicación web en AWS EC2 utilizando
+                            Docker Compose y Nginx como reverse proxy. Configuré
+                            dominio propio, DNS con Cloudflare y HTTPS mediante
+                            Let's Encrypt.
+                        </p>
+
+                        <div class="tags">
+                            <span>AWS</span>
+                            <span>EC2</span>
+                            <span>Docker</span>
+                            <span>Nginx</span>
+                            <span>HTTPS</span>
+                            <span>Cloudflare</span>
+                        </div>
+
+                        <div class="project-links">
+
+                            <a href="#infraestructura">
+                                Ver arquitectura →
+                            </a>
+
+                            <a
+                                href="https://github.com/a20226706-cyber/linux-server-secure"
+                                target="_blank"
+                            >
+                                GitHub →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                
+                <article class="card">
+
+                    <div class="project-image">
+                        <img
+                            src="{{ url_for('static', filename='images/linux-server.png') }}"
+                            alt="Servidor Linux Seguro"
+                        >
+                    </div>
+
+                    <div class="project-content">
+
+                        <span class="project-number">
+                            Proyecto personal
+                        </span>
+
+                        <h3>Servidor Linux Seguro</h3>
+
+                        <p>
+                            Configuración de un servidor Ubuntu con usuarios y permisos,
+                            acceso remoto mediante SSH, firewall UFW y servicios web con
+                            Nginx, Flask y Gunicorn. El servicio fue configurado para
+                            ejecutarse automáticamente con systemd.
+                        </p>
+
+                        <div class="tags">
+                            <span>Linux</span>
+                            <span>Ubuntu</span>
+                            <span>SSH</span>
+                            <span>UFW</span>
+                            <span>Nginx</span>
+                            <span>Flask</span>
+                            <span>Gunicorn</span>
+                        </div>
+
+                        <div class="project-links">
+
+                            <a
+                                href="https://github.com/a20226706-cyber/linux-server-secure"
+                                target="_blank"
+                            >
+                                GitHub →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                
+                <article class="card">
+
+                    <div class="project-image">
+                        <img
+                            src="{{ url_for('static', filename='images/enterprise-network.png') }}"
+                            alt="Red Empresarial en Cisco Packet Tracer"
+                        >
+                    </div>
+
+                    <div class="project-content">
+
+                        <span class="project-number">
+                            Proyecto personal
+                        </span>
+
+                        <h3>Red empresarial con respaldo OSPF</h3>
+
+                        <p>
+                            Diseño y configuración de una red empresarial segmentada
+                            mediante VLANs, enlaces trunk y enrutamiento inter-VLAN.
+                            Implementé DHCP para asignación automática de direcciones
+                            y ACLs para controlar el acceso entre áreas.
+                        </p>
+                        <p>
+                            Conecté dos sedes mediante OSPF. Al desconectar el enlace principal,
+                            verifiqué con <code>tracert</code> que la sucursal llegaba al servidor
+                            por el enlace de respaldo. Al restaurarlo, confirmé en la tabla de
+                            rutas que OSPF volvía a elegir el principal.
+                        </p>
+
+                        <div class="tags">
+                            <span>Cisco</span>
+                            <span>Packet Tracer</span>
+                            <span>VLAN</span>
+                            <span>Trunk</span>
+                            <span>DHCP</span>
+                            <span>ACL</span>
+                            <span>OSPF</span>
+                        </div>
+
+                        <div class="project-links">
+
+                            <a
+                                href="https://github.com/a20226706-cyber/enterprise-network-packet-tracer"
+                                target="_blank"
+                            >
+                                GitHub →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </div>
+        </section>
+
+
+        <section id="tecnologias" class="section">
+            <h2>Tecnologías</h2>
+
+            <div class="tech-grid">
+                <span>Linux</span>
+                <span>Git</span>
+                <span>GitHub</span>
+                <span>Docker</span>
+                <span>Docker Compose</span>
+                <span>AWS EC2</span>
+                <span>Nginx</span>
+                <span>Flask</span>
+                <span>Networking</span>
+                <span>TCP/IP</span>
+            </div>
+        </section>
+
+
+        <section id="infraestructura" class="section">
+            <h2>Infraestructura de este portafolio</h2>
+
+            <p>Así llega una visita desde el navegador hasta la aplicación Flask que sirve esta página.</p>
+            <div class="architecture">
+                <div class="arch-node">Navegador</div>
+                <div class="arch-link"><span aria-hidden="true">↓</span> HTTPS</div>
+                <div class="arch-node">Cloudflare</div>
+                <div class="arch-link" aria-hidden="true">↓</div>
+                <div class="arch-host">
+                    <h3>Instancia AWS EC2</h3>
+                    <div class="arch-node">Nginx · proxy inverso</div>
+                    <div class="arch-link" aria-hidden="true">↓</div>
+                    <div class="arch-node">Gunicorn → Flask</div>
+                    <p>Docker Compose administra los dos contenedores.</p>
+                </div>
+            </div>
+        </section>
+        <section id="contacto" class="section">
+            <h2>Contacto</h2>
+
+            <p>
+                Actualmente estoy interesado en oportunidades de prácticas
+                preprofesionales y posiciones junior relacionadas con Cloud,
+                Infraestructura TI, Redes y DevOps.
+            </p>
+
+            <div class="contact-links">
+
+                <a href="https://github.com/a20226706-cyber"
+                target="_blank"
+                class="btn secondary">
+                    GitHub
+                </a>
+
+                <a href="https://www.linkedin.com/in/alvaro-cabrera-buendia/"
+                target="_blank"
+                class="btn secondary">
+                    LinkedIn
+                </a>
+
+                <a href="/static/cv/CV_Alvaro_Cabrera.pdf"
+                target="_blank"
+                class="btn secondary">
+                    Ver CV
+                </a>
+
+            </div>
+        </section>
+    </main>
+
+
+    <footer>
+        <p>
+            Álvaro Cabrera Buendía · Cloud & DevOps Portfolio
+        </p>
+    </footer>
+
+</body>
+</html>
